@@ -10,7 +10,7 @@
                                       (set-transient-map key-map nil
                                                          (lambda ()
                                                            (run-hooks 'sparky-quit-hook)))
-                                      (funcall func)))))
+                                      (call-interactively func)))))
 
 (defvar sparky-enter-hook nil)
 
