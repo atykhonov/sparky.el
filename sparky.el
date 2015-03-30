@@ -31,8 +31,6 @@
     (sparky--define-key map "c" 'forward-sentence)
     (sparky--define-key map "." 'sparky-undo-last-command)
     (sparky--define-key map "," 'sparky-adjust-last-command)
-    (sparky--define-key map "." 'sparky-undo-last-command)
-    (sparky--define-key map "," 'sparky--adjust-last-command)
     ;; quick shortcuts to the other modes:
     (sparky--define-key map "b" 'sparky-backward)
     (sparky--define-key map "p" 'sparky-backward)
