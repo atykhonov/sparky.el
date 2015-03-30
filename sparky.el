@@ -1,3 +1,6 @@
+(require 'thingatpt)
+(require 'cl)
+
 (defmacro sparky--define-key (map key function)
   `(lexical-let ((key-map ,map)
                  (func ,function))
