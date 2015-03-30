@@ -9,8 +9,6 @@
                                       (run-hooks 'sparky-enter-hook)
                                       (set-transient-map key-map nil
                                                          (lambda ()
-                                                           (interactive)
-                                                           (run-hooks 'sparky-enter-hook)
                                                            (run-hooks 'sparky-quit-hook)))
                                       (funcall func)))))
 
