@@ -96,7 +96,7 @@
                                         (end-of-line))))))
     (sparky--define-key map "r" (lambda ()
                                   (interactive)
-                                  (iregister-copy-to-register (region-beginning) (region-end) '(4))))
+                                  (kill-region (region-beginning) (region-end) '(4))))
     (sparky--define-key map "c" 'kill-rectangle)
     (sparky--define-key map "s" (lambda ()
                                   (interactive)
