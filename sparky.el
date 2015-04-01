@@ -204,7 +204,7 @@
 (defun sparky-keyboard-quit ()
   (interactive)
   (run-hooks 'sparky-quit-hook)
-  (keyboard-escape-quit))
+  (keyboard-quit))
 
 (defvar sparky-last-command nil)
 
