@@ -29,6 +29,7 @@
     (sparky--define-key map "i" 'down-list)
     (sparky--define-key map "l" 'forward-list)
     (sparky--define-key map "c" 'forward-sentence)
+    (sparky--define-key map "<SPC>" 'set-mark-command)
     (sparky--define-key map "." 'sparky-undo-last-command)
     (sparky--define-key map "," 'sparky-adjust-last-command)
     ;; quick shortcuts to the other modes:
@@ -50,6 +51,7 @@
     (sparky--define-key map "u" 'backward-up-list)
     (sparky--define-key map "l" 'backward-list)
     (sparky--define-key map "c" 'backward-sentence)
+    (sparky--define-key map "<SPC>" 'set-mark-command)
     (sparky--define-key map "." 'sparky-undo-last-command)
     (sparky--define-key map "," 'sparky-adjust-last-command)
     ;; quick shortcuts to the other modes:
@@ -132,6 +134,7 @@
                                     (goto-char start)
                                     (set-mark-command nil)
                                     (goto-char (- end 1)))))
+    (sparky--define-key map "x" 'kill-region)
     ;; quick shortcuts to the other modes:
     (sparky--define-key map "f" 'sparky-forward)
     (sparky--define-key map "n" 'sparky-forward)
@@ -152,6 +155,7 @@
                                   (beginning-of-sexp)))
     (sparky--define-key map "u" 'beginning-of-defun)
     (sparky--define-key map "l" 'beginning-of-line-text)
+    (sparky--define-key map "<SPC>" 'set-mark-command)
     ;; quick shortcuts to the other modes:
     (sparky--define-key map "f" 'sparky-forward)
     (sparky--define-key map "b" 'sparky-backward)
@@ -170,6 +174,7 @@
                                   (interactive)
                                   (end-of-sexp)))
     (sparky--define-key map "u" 'end-of-defun)
+    (sparky--define-key map "<SPC>" 'set-mark-command)
     ;; quick shortcuts to the other modes:
     (sparky--define-key map "f" 'sparky-forward)
     (sparky--define-key map "b" 'sparky-backward)
@@ -192,6 +197,7 @@
     (sparky--define-key map "c" (lambda ()
                                   (interactive)
                                   (mark-end-of-sentence 1)))
+    (sparky--define-key map "x" 'kill-region)
     ;; quick shortcuts to the other modes:
     (sparky--define-key map "f" 'sparky-forward)
     (sparky--define-key map "b" 'sparky-backward)
