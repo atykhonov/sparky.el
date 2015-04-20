@@ -38,7 +38,9 @@
     ;; ("a" beginning/body "Turn on beginning mode." :exit t)
     ;; ("e" end/body "Turn on end mode." :exit t)
     (sparky--define-key map "k" 'sparky-mark)
+    (sparky--define-key map "d" 'sparky-mark-forward)
     (sparky--define-key map "a" 'sparky-beginning)
+    (sparky--define-key map "e" 'sparky-end)
     ;; ("d" kill-word/body "Turn on kill-word mode." :exit t)
     (define-key map (kbd "g") 'sparky-keyboard-quit)
     map))
@@ -141,6 +143,8 @@
     (sparky--define-key map "b" 'sparky-backward)
     (sparky--define-key map "p" 'sparky-backward)
     (sparky--define-key map "a" 'sparky-beginning)
+    (sparky--define-key map "e" 'sparky-beginning)
+    (sparky--define-key map "d" 'sparky-mark-forward)
     ;; ("e" end/body "Turn on end mode." :exit t)
     ;; ("d" kill-word/body "Turn on kill-word mode." :exit t)
     (define-key map (kbd "g") 'sparky-keyboard-quit)
@@ -163,6 +167,7 @@
     (sparky--define-key map "p" 'sparky-backward)
     (sparky--define-key map "e" 'sparky-end)
     (sparky--define-key map "k" 'sparky-mark)
+    (sparky--define-key map "d" 'sparky-mark-forward)
     (define-key map (kbd "g") 'sparky-keyboard-quit)
     map))
 
@@ -182,6 +187,7 @@
     (sparky--define-key map "p" 'sparky-backward)
     (sparky--define-key map "a" 'sparky-beginning)
     (sparky--define-key map "k" 'sparky-mark)
+    (sparky--define-key map "d" 'sparky-mark-forward)
     ;; (sparky--define-key map "d" 'kill-word)
     (define-key map (kbd "g") 'sparky-keyboard-quit)
     map))
@@ -201,6 +207,8 @@
     ;; quick shortcuts to the other modes:
     (sparky--define-key map "f" 'sparky-forward)
     (sparky--define-key map "b" 'sparky-backward)
+    (sparky--define-key map "n" 'sparky-forward)
+    (sparky--define-key map "p" 'sparky-backward)
     (sparky--define-key map "a" 'sparky-beginning)
     (sparky--define-key map "e" 'sparky-end)
     (sparky--define-key map "k" 'sparky-mark)
@@ -210,7 +218,7 @@
 (defun sparky-keyboard-quit ()
   (interactive)
   (run-hooks 'sparky-quit-hook)
-  (keyboard-escape-quit))
+  (keyboard-quit))
 
 (defvar sparky-last-command nil)
 
