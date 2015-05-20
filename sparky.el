@@ -248,26 +248,32 @@
 
 (defun sparky-forward ()
   (interactive)
+  (run-hooks 'sparky-enter-hook)
   (set-transient-map sparky-forward-map))
 
 (defun sparky-backward ()
   (interactive)
+  (run-hooks 'sparky-enter-hook)
   (set-transient-map sparky-backward-map))
 
 (defun sparky-mark ()
   (interactive)
+  (run-hooks 'sparky-enter-hook)
   (set-transient-map sparky-mark-map))
 
 (defun sparky-mark-forward ()
   (interactive)
+  (run-hooks 'sparky-enter-hook)
   (set-transient-map sparky-mark-forward-map))
 
 (defun sparky-beginning ()
   (interactive)
+  (run-hooks 'sparky-enter-hook)
   (set-transient-map sparky-beginning-map))
 
 (defun sparky-end ()
   (interactive)
+  (run-hooks 'sparky-enter-hook)
   (set-transient-map sparky-end-map))
 
 (global-set-key (kbd "M-f") 'sparky-forward)
