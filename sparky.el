@@ -19,6 +19,7 @@
 (defvar sparky-forward-map
   (let ((map (make-sparse-keymap)))
     (sparky--define-key map "x" 'forward-sentence)
+    (sparky--define-key map "r" 'forward-paragraph)
     (sparky--define-key map "n" 'next-line)
     (sparky--define-key map "f" 'forward-word)
     (sparky--define-key map "s" 'forward-sexp)
@@ -53,6 +54,7 @@
     (sparky--define-key map "u" 'backward-up-list)
     (sparky--define-key map "l" 'backward-list)
     (sparky--define-key map "c" 'backward-sentence)
+    (sparky--define-key map "r" 'backward-paragraph)
     (sparky--define-key map "<SPC>" 'set-mark-command)
     (sparky--define-key map "." 'sparky-undo-last-command)
     (sparky--define-key map "," 'sparky-adjust-last-command)
@@ -275,6 +277,7 @@
   (interactive)
   (run-hooks 'sparky-enter-hook)
   (set-transient-map sparky-end-map))
+
 
 (global-set-key (kbd "M-f") 'sparky-forward)
 (global-set-key (kbd "M-b") 'sparky-backward)
