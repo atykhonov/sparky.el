@@ -1,16 +1,30 @@
 (require 'thingatpt)
 (require 'cl)
 
-(defmacro sparky--define-key (map key function)
+
+(defmacro sparky--define-key (map key fun &optional undo-fun adjust-fun)
   `(lexical-let ((key-map ,map)
-                 (func ,function))
+                 (func ,fun)
+                 (undo-func ,undo-fun)
+                 (adjust-func ,adjust-fun))
      (define-key key-map (kbd ,key) (lambda ()
                                       (interactive)
                                       (run-hooks 'sparky-enter-hook)
                                       (set-transient-map key-map nil
                                                          (lambda ()
                                                            (run-hooks 'sparky-quit-hook)))
-                                      (call-interactively func)))))
+                                      (when (and (not (eq func 'sparky-adjust-last-command))
+                                                 (not (eq func 'sparky-undo-last-command)))
+                                        (push (point) sparky-point-stack))
+                                      (call-interactively func)
+                                      (when (and (not (eq func 'sparky-adjust-last-command))
+                                                 (not (eq func 'sparky-undo-last-command)))
+                                        (setq sparky-last-undo-command undo-func)
+                                        (setq sparky-last-adjust-command adjust-func)
+                                        (setq sparky-last-command last-command)
+                                        (setq sparky-last-function func)
+                                        (setq sparky-last-key ,key))
+                                      ))))
 
 (defvar sparky-enter-hook nil)
 
@@ -18,10 +32,17 @@
 
 (defvar sparky-forward-map
   (let ((map (make-sparse-keymap)))
-    (sparky--define-key map "x" 'forward-sentence)
-    (sparky--define-key map "n" 'next-line)
-    (sparky--define-key map "f" 'forward-word)
-    (sparky--define-key map "s" 'forward-sexp)
+    (sparky--define-key map "x" 'forward-sentence
+                        'backward-sentence 'backward-sentence)
+    (sparky--define-key map "n" 'next-line
+                        'previous-line 'previous-line)
+    (sparky--define-key map "f" 'forward-word
+                        'backward-word (lambda ()
+                                         (interactive)
+                                         (backward-word 2)
+                                         (forward-word)))
+    (sparky--define-key map "s" 'forward-sexp
+                        'backward-sexp 'backward-sexp)
     (sparky--define-key map "y" (lambda ()
                                   (interactive)
                                   (forward-symbol 1)))
@@ -46,9 +67,13 @@
 
 (defvar sparky-backward-map
   (let ((map (make-sparse-keymap)))
-    (sparky--define-key map "p" 'previous-line)
-    (sparky--define-key map "b" 'backward-word)
-    (sparky--define-key map "s" 'backward-sexp)
+    (sparky--define-key map "p" 'previous-line 'next-line)
+    (sparky--define-key map "b" 'backward-word
+                        'forward-word (lambda ()
+                                        (interactive)
+                                        (forward-word 2)
+                                        (backward-word)))
+    (sparky--define-key map "s" 'backward-sexp 'forward-sexp)
     (sparky--define-key map "u" 'backward-up-list)
     (sparky--define-key map "l" 'backward-list)
     (sparky--define-key map "c" 'backward-sentence)
@@ -216,23 +241,25 @@
 
 (defvar sparky-last-command nil)
 
+(defvar sparky-last-function nil)
+
+(defvar sparky-last-key nil)
+
+(defvar sparky-last-key-map nil)
+
+(defvar sparky-last-undo-command nil)
+
+(defvar sparky-last-adjust-command nil)
+
+(defvar sparky-point-stack (list))
+
 (defun sparky-adjust-last-command ()
   (interactive)
-  (let ((previous-command (nth 0 sparky-last-command)))
-    (when (not (null sparky-last-command))
-      (cond ((eq previous-command 'backward-word) (forward-word))
-            ((eq previous-command 'backward-sexp) (forward-sexp))
-            ((eq previous-command 'forward-word) (backward-word))
-            ((eq previous-command 'forward-sexp) (backward-sexp))))))
+  (call-interactively sparky-last-adjust-command))
 
 (defun sparky-undo-last-command ()
   (interactive)
-  (let ((previous-command (nth 0 sparky-last-command)))
-    (when (not (null sparky-last-command))
-      (cond ((eq previous-command 'backward-word) (progn (forward-word 2) (backward-word)))
-            ((eq previous-command 'backward-sexp) (progn (forward-sexp 2) (backward-sexp)))
-            ((eq previous-command 'forward-word) (progn (backward-word 2) (forward-word)))
-            ((eq previous-command 'forward-sexp) (progn (backward-sexp 2) (forward-sexp)))))))
+  (call-interactively sparky-last-undo-command))
 
 (defun sparky-mark-thing-at-point (thing)
   (let ((bounds (bounds-of-thing-at-point thing)))
@@ -257,26 +284,32 @@
 
 (defun sparky-forward ()
   (interactive)
+  (setq sparky-last-key-map 'sparky-forward-map)
   (set-transient-map sparky-forward-map))
 
 (defun sparky-backward ()
   (interactive)
+  (setq sparky-last-key-map 'sparky-backward-map)
   (set-transient-map sparky-backward-map))
 
 (defun sparky-mark ()
   (interactive)
+  (setq sparky-last-key-map 'sparky-mark-map)
   (set-transient-map sparky-mark-map))
 
 (defun sparky-mark-forward ()
   (interactive)
+  (setq sparky-last-key-map 'sparky-mark-forward-map)
   (set-transient-map sparky-mark-forward-map))
 
 (defun sparky-beginning ()
   (interactive)
+  (setq sparky-last-key-map 'sparky-beginning-map)
   (set-transient-map sparky-beginning-map))
 
 (defun sparky-end ()
   (interactive)
+  (setq sparky-last-key-map 'sparky-end-map)
   (set-transient-map sparky-end-map))
 
 (global-set-key (kbd "M-f") 'sparky-forward)
